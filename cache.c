@@ -5,11 +5,18 @@
 #include <strings.h>
 
 #define printerr(msg) fprintf(stderr, "In file %s function %s line %d: %s\n", __FILE__, __func__, __LINE__, msg)
+
+// Update LRU callbacks
 void update_lru_lru(struct cache * c, uint32_t s, uint32_t way);
 void update_lru_plru(struct cache * c, uint32_t s, uint32_t way);
-
 static void (* const up_lru[NUM_POLICIES])(struct cache *, uint32_t, uint32_t) =
                 {update_lru_lru, update_lru_plru};
+
+// Find LRU callbacks
+int find_lru_lru(struct cache * c, uint32_t s);
+int find_lru_plru(struct cache * c, uint32_t s);
+static int (* const _find_lru[NUM_POLICIES])(struct cache *, uint32_t s) =
+                        {find_lru_lru, find_lru_plru};
 
 void initialize_cache(struct cache * c, uint32_t sets, uint32_t line_sz,
                 uint32_t nways, const char * policy)
@@ -42,7 +49,8 @@ void initialize_cache(struct cache * c, uint32_t sets, uint32_t line_sz,
         c->lines = calloc(nways * sets, sizeof *(c->lines));
         if (c->lines == NULL) { perror("calloc"); exit(1);}
         if (c->params.rpolicy == PLRU) {
-                c->plru = calloc(sets, sizeof *(c->plru));
+                c->plru = calloc(sets * nways, sizeof *(c->plru));
+                if (c->plru == NULL) { perror("calloc"); exit(1);}
         }
         printf("Allocating %d lines\n", nways * sets);
 
@@ -66,6 +74,46 @@ void free_cache(struct cache * c)
                 free(c->plru);
 }
 
+int find_lru_lru(struct cache * c, uint32_t s)
+{
+        struct line * set = &c->lines[s * c->params.ways];
+        for (int i = 0; i < c->params.ways; ++i) {
+                if (set[i].lru != c->params.ways-1)
+                        continue;
+                return i;
+        }
+        fprintf(stderr, "LRU functionality failed for set %d\n", s);
+        printerr("LRU functionality failed");
+        exit(1);
+}
+
+int find_lru_plru(struct cache * c, uint32_t s)
+{
+        int w = (c->params.ways) >> 1;
+        int idx = 1;
+        int retval = 0;
+        char * plru = &(c->plru[s * c->params.ways]);
+        
+        while (idx < c->params.ways) {
+                switch (plru[idx]) {
+                        case 0:
+                                idx = idx << 1;
+                                break;
+                        case 1:
+                                idx = (idx << 1) + 1;
+                                retval += w;
+                                break;
+                        default:
+                                printerr("LRU functionality failed");
+                                exit(1);
+
+                }
+                w >>= 1;
+        }
+
+
+}
+
 void update_lru_lru(struct cache * c, uint32_t s, uint32_t way)
 {
         struct line * set = &c->lines[s * c->params.ways];
@@ -81,7 +129,23 @@ void update_lru_lru(struct cache * c, uint32_t s, uint32_t way)
 
 void update_lru_plru(struct cache * c, uint32_t s, uint32_t way)
 {
+        int ways = c->params.ways;
+        int idx = 1;
+        char * plru = &(c->plru[s * c->params.ways]);
 
+        while (ways > 1) {
+                if (way < (ways >> 1)) {
+                        // traverse left
+                        plru[idx] = 1;
+                        idx = idx << 1;
+                }
+                else {
+                        // traverse right
+                        plru[idx] = 0;
+                        idx = (idx << 1) + 1;
+                }
+                ways >>= 1;
+        }
 }
 
 void update_lru(struct cache * c, uint32_t s, uint32_t way)
@@ -89,24 +153,23 @@ void update_lru(struct cache * c, uint32_t s, uint32_t way)
         up_lru[c->params.rpolicy](c, s, way);
 }
 
+
+int find_lru(struct cache * c, uint32_t s)
+{
+        return _find_lru[c->params.rpolicy](c, s);
+}
+
 void evict_line(struct cache * c, uint32_t s)
 {
         struct line * set = &c->lines[s * c->params.ways];
-        for (int i = 0; i < c->params.ways; ++i) {
-                if (set[i].lru != c->params.ways-1)
-                        continue;
-                if (set[i].ctl_bits & DIRTY_MASK) {
-                        set[i].stats.dirty_evict += 1;
-                }
-                else {
-                        set[i].stats.clean_evict += 1;
-                }
-                set[i].ctl_bits = 0;
-                return;
+        int lru_way = find_lru(c, s);
+        if (set[lru_way].ctl_bits & DIRTY_MASK) {
+                set[lru_way].stats.dirty_evict += 1;
         }
-        fprintf(stderr, "LRU functionality failed for set %d\n", s);
-        perror("LRU functionality failed");
-        exit(1);
+        else {
+                set[lru_way].stats.clean_evict += 1;
+        }
+        set[lru_way].ctl_bits = 0;
 }
 
 void load(struct cache * c, uint64_t addr)

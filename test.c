@@ -32,7 +32,7 @@ int main(void)
 {
         struct cache c;
         struct cache_stats s;
-        initialize_cache(&c, 1024, 32, 2, "LRU");
+        initialize_cache(&c, 1024, 8, 8, "LRU");
 
         //standard(&c);
         tile(&c, 8);

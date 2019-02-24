@@ -36,7 +36,7 @@ struct cache {
                 enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;
         } params;
         struct line * lines;
-        uint64_t * plru;
+        char * plru;
 };
 
 /*

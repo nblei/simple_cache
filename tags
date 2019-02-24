@@ -1,0 +1,57 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/576c750/
+DIRTY_MASK	cache.h	/^#define DIRTY_MASK /;"	d
+LRU	cache.h	/^                enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;$/;"	e	enum:cache::__anonb203b64f0108::__anonb203b64f0203
+NBLEIER3_CACHE_H	cache.h	/^#define NBLEIER3_CACHE_H$/;"	d
+NUM_POLICIES	cache.h	/^                enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;$/;"	e	enum:cache::__anonb203b64f0108::__anonb203b64f0203
+PLRU	cache.h	/^                enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;$/;"	e	enum:cache::__anonb203b64f0108::__anonb203b64f0203
+Simple Cache	README.md	/^# Simple Cache$/;"	c
+VALID_MASK	cache.h	/^#define VALID_MASK /;"	d
+__anonb203b64f0108	cache.h	/^        struct {$/;"	s	struct:cache
+__anonb203b64f0203	cache.h	/^                enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;$/;"	g	struct:cache::__anonb203b64f0108
+_find_lru	cache.c	/^static int (* const _find_lru[NUM_POLICIES])(struct cache *, uint32_t s) =$/;"	v	typeref:typename:int (* const[NUM_POLICIES])(struct cache *,uint32_t s)	file:
+all	Makefile	/^all : cache.o test.c$/;"	t
+cache	cache.h	/^struct cache {$/;"	s
+cache.o	Makefile	/^cache.o : cache.c cache.h$/;"	t
+cache_stats	cache.h	/^struct cache_stats {$/;"	s
+clean	Makefile	/^clean :$/;"	t
+clean_evict	cache.h	/^        uint32_t clean_evict;$/;"	m	struct:cache_stats	typeref:typename:uint32_t
+ctl_bits	cache.h	/^        uint8_t ctl_bits;$/;"	m	struct:line	typeref:typename:uint8_t
+dirty_evict	cache.h	/^        uint32_t dirty_evict;$/;"	m	struct:cache_stats	typeref:typename:uint32_t
+evict_line	cache.c	/^void evict_line(struct cache * c, uint32_t s)$/;"	f	typeref:typename:void
+find_lru	cache.c	/^int find_lru(struct cache * c, uint32_t s)$/;"	f	typeref:typename:int
+find_lru_lru	cache.c	/^int find_lru_lru(struct cache * c, uint32_t s)$/;"	f	typeref:typename:int
+find_lru_plru	cache.c	/^int find_lru_plru(struct cache * c, uint32_t s)$/;"	f	typeref:typename:int
+free_cache	cache.c	/^void free_cache(struct cache * c)$/;"	f	typeref:typename:void
+get_stats	cache.c	/^void get_stats(struct cache * restrict c, struct cache_stats * restrict s)$/;"	f	typeref:typename:void
+hit	cache.h	/^        uint32_t hit;$/;"	m	struct:cache_stats	typeref:typename:uint32_t
+in	test.c	/^static const uint64_t in = 1 << 20;$/;"	v	typeref:typename:const uint64_t	file:
+initialize_cache	cache.c	/^void initialize_cache(struct cache * c, uint32_t sets, uint32_t line_sz,$/;"	f	typeref:typename:void
+line	cache.h	/^struct line {$/;"	s
+lines	cache.h	/^        struct line * lines;$/;"	m	struct:cache	typeref:struct:line *
+load	cache.c	/^void load(struct cache * c, uint64_t addr)$/;"	f	typeref:typename:void
+lru	cache.h	/^        uint8_t lru;$/;"	m	struct:line	typeref:typename:uint8_t
+main	test.c	/^int main(void)$/;"	f	typeref:typename:int
+miss	cache.h	/^        uint32_t miss;$/;"	m	struct:cache_stats	typeref:typename:uint32_t
+offsetbits	cache.h	/^                uint8_t offsetbits;$/;"	m	struct:cache::__anonb203b64f0108	typeref:typename:uint8_t
+out	test.c	/^static const uint64_t out = 1 << 22;$/;"	v	typeref:typename:const uint64_t	file:
+params	cache.h	/^        } params;$/;"	m	struct:cache	typeref:struct:cache::__anonb203b64f0108
+plru	cache.h	/^        char * plru;$/;"	m	struct:cache	typeref:typename:char *
+printerr	cache.c	/^#define printerr(/;"	d	file:
+rpolicy	cache.h	/^                enum { LRU=0, PLRU=1, NUM_POLICIES=2 } rpolicy;$/;"	m	struct:cache::__anonb203b64f0108	typeref:enum:cache::__anonb203b64f0108::__anonb203b64f0203
+setbits	cache.h	/^                uint8_t setbits;$/;"	m	struct:cache::__anonb203b64f0108	typeref:typename:uint8_t
+standard	test.c	/^void standard(struct cache * c)$/;"	f	typeref:typename:void
+stats	cache.h	/^        struct cache_stats stats;$/;"	m	struct:line	typeref:struct:cache_stats
+store	cache.c	/^void store(struct cache * c, uint64_t addr)$/;"	f	typeref:typename:void
+tag	cache.h	/^        uint64_t tag;$/;"	m	struct:line	typeref:typename:uint64_t
+tile	test.c	/^void tile(struct cache * c, int tile)$/;"	f	typeref:typename:void
+up_lru	cache.c	/^static void (* const up_lru[NUM_POLICIES])(struct cache *, uint32_t, uint32_t) =$/;"	v	typeref:typename:void (* const[NUM_POLICIES])(struct cache *,uint32_t,uint32_t)	file:
+update_lru	cache.c	/^void update_lru(struct cache * c, uint32_t s, uint32_t way)$/;"	f	typeref:typename:void
+update_lru_lru	cache.c	/^void update_lru_lru(struct cache * c, uint32_t s, uint32_t way)$/;"	f	typeref:typename:void
+update_lru_plru	cache.c	/^void update_lru_plru(struct cache * c, uint32_t s, uint32_t way)$/;"	f	typeref:typename:void
+ways	cache.h	/^                uint8_t ways;$/;"	m	struct:cache::__anonb203b64f0108	typeref:typename:uint8_t
